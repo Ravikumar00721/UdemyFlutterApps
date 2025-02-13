@@ -1,25 +1,32 @@
+import 'package:favorite_places/provider/user_places_provider.dart';
 import 'package:favorite_places/screens/add_place.dart';
 import 'package:favorite_places/widgets/places_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PlacesListScreen extends StatelessWidget {
+class PlacesListScreen extends ConsumerWidget {
   const PlacesListScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userPlaces = ref.watch(userPlacesProvider);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Places List"),
+        title: const Text("Places List"),
         actions: [
           IconButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (ctx) => const AddPlacesScreen()));
               },
-              icon: Icon(Icons.add))
+              icon: const Icon(Icons.add))
         ],
       ),
-      body: const PlacesList(places: []),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: PlacesList(places: userPlaces),
+      ),
     );
   }
 }
