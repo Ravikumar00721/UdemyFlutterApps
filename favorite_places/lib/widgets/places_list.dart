@@ -39,6 +39,13 @@ class _PlacesListState extends State<PlacesList> {
               .bodyLarge
               ?.copyWith(color: Theme.of(context).colorScheme.onBackground),
         ),
+        subtitle: Text(
+          widget.places[index].loacation.address,
+          style: Theme.of(context)
+              .textTheme
+              .bodySmall
+              ?.copyWith(color: Theme.of(context).colorScheme.onBackground),
+        ),
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (ctx) =>
