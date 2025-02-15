@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:favorite_places/model/places.dart';
+import 'package:favorite_places/screens/maps.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
 
@@ -62,46 +64,75 @@ class _LocationInputState extends State<LocationInput> {
       isGettingLocation = true;
     });
 
+    print("Fetching location...");
     locationData = await location.getLocation();
-
     final lat = locationData.latitude;
     final long = locationData.longitude;
 
     if (lat == null || long == null) {
       print("Failed to get location.");
+      setState(() {
+        isGettingLocation = false;
+      });
       return;
     }
 
     print("Retrieved location: Latitude=$lat, Longitude=$long");
 
-    // Correct Google Geocoding API URL
-    final url = Uri.parse(
-        'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$long&key=AIzaSyCwdeYzq24mb3UIg85UQDZaivSbFZMla2M');
+    savePlace(lat, long); // Ensure this is being called
+  }
 
-    try {
-      final response = await http.get(url);
-      final resData = json.decode(response.body);
+  void onSelectMap() async {
+    final pickedLocation = await Navigator.of(context)
+        .push<LatLng>(MaterialPageRoute(builder: (ctx) => const MapsScreen()));
 
-      if (resData['results'].isEmpty) {
-        print("No address found for this location.");
-        return;
-      }
-
-      final address = resData['results'][0]['formatted_address'];
-      print("Formatted Address: $address");
-
-      setState(() {
-        _pickedLocation =
-            PlaceLocation(address: address, lattitude: lat, longitide: long);
-        isGettingLocation = false;
-      });
-    } catch (error) {
-      print("Error fetching address: $error");
-      setState(() {
-        isGettingLocation = false;
-      });
+    if (pickedLocation == null) {
+      return;
     }
 
+    // Save the place first before calling the callback
+    savePlace(pickedLocation.latitude, pickedLocation.longitude);
+
+    // Ensure we wait for the address retrieval before passing location
+    setState(() {
+      _pickedLocation = PlaceLocation(
+        lattitude: pickedLocation.latitude,
+        longitide: pickedLocation.longitude,
+        address: '', // Temporary empty address, will update later
+      );
+    });
+
+    widget.onSelectLocatonMap(_pickedLocation!);
+    print("Location sent to AddPlace: ${_pickedLocation!.address}");
+  }
+
+  void savePlace(double lattitude, double longitude) async {
+    final url = Uri.parse(
+        'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lattitude,$longitude&key=AIzaSyCwdeYzq24mb3UIg85UQDZaivSbFZMla2M');
+    final response = await http.get(url);
+    final resData = json.decode(response.body);
+
+    if (resData['results'].isEmpty) {
+      print("No address found for this location.");
+      return;
+    }
+
+    final address = resData['results'][0]['formatted_address'];
+    print("Formatted Address: $address");
+
+    // Ensure state is updated before calling the callback
+    setState(() {
+      _pickedLocation = PlaceLocation(
+        address: address,
+        lattitude: lattitude,
+        longitide: longitude,
+      );
+      isGettingLocation = false;
+    });
+
+    print("Location sent to AddPlace: ${_pickedLocation!.address}");
+
+    // Now call the callback
     widget.onSelectLocatonMap(_pickedLocation!);
   }
 
@@ -155,7 +186,7 @@ class _LocationInputState extends State<LocationInput> {
             ),
             TextButton.icon(
               icon: const Icon(Icons.map),
-              onPressed: () {},
+              onPressed: onSelectMap,
               label: const Text("Select On Map"),
             ),
           ],

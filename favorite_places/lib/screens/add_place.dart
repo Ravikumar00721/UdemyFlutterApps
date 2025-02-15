@@ -28,6 +28,8 @@ class _AddPlacesScreenState extends ConsumerState<AddPlacesScreen> {
         _selectedLocation == null) {
       return;
     }
+    final l = _selectedLocation?.address;
+    print("ADDRESS IN ADD PLACE : $l");
     ref
         .read(userPlacesProvider.notifier)
         .addPlace(enteredText, _selectedImage!, _selectedLocation!);
@@ -70,7 +72,11 @@ class _AddPlacesScreenState extends ConsumerState<AddPlacesScreen> {
             ),
             LocationInput(
               onSelectLocatonMap: (location) {
-                _selectedLocation = location;
+                print(
+                    "Location received in AddPlacesScreen: ${location.address}");
+                setState(() {
+                  _selectedLocation = location;
+                });
               },
             ),
             SizedBox(

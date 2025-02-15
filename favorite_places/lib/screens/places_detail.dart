@@ -13,6 +13,12 @@ class PlacesDetailScreen extends StatelessWidget {
 
     // Print the coordinates for debugging
     print("Latitude: $lat, Longitude: $long");
+    final l = places.loacation.address;
+    if (l.isEmpty) {
+      print("Address is Not Reached");
+    } else {
+      print("Location Address : $l");
+    }
 
     return 'https://maps.googleapis.com/maps/api/staticmap?center$lat,$long=&zoom=16&size=600x300&maptype=roadmap&markers=color:red%7Clabel:A%7C$lat,$long&key=AIzaSyCwdeYzq24mb3UIg85UQDZaivSbFZMla2M';
   }

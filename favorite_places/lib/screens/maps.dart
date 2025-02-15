@@ -29,26 +29,41 @@ class _CreateMapState extends State<MapsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            widget.isSelecting ? "Select Your location" : " Your Location"),
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.save))],
+        title:
+            Text(widget.isSelecting ? "Select Your Location" : "Your Location"),
+        actions: [
+          if (widget.isSelecting && pickedLocation != null)
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).pop(pickedLocation);
+              },
+              icon: const Icon(Icons.save),
+            ),
+        ],
       ),
       body: GoogleMap(
-          onTap: (location) {
-            pickedLocation = location;
-          },
-          initialCameraPosition: CameraPosition(
-              target:
-                  LatLng(widget.location.lattitude, widget.location.longitide)),
-          markers: (pickedLocation == null && widget.isSelecting)
-              ? {}
-              : {
-                  Marker(
-                      markerId: const MarkerId('m1'),
-                      position: pickedLocation ??
-                          LatLng(widget.location.lattitude,
-                              widget.location.longitide)),
-                }),
+        onTap: !widget.isSelecting
+            ? null
+            : (location) {
+                setState(() {
+                  pickedLocation = location;
+                });
+              },
+        initialCameraPosition: CameraPosition(
+          target: LatLng(widget.location.lattitude, widget.location.longitide),
+          zoom: 14,
+        ),
+        markers: (pickedLocation == null && widget.isSelecting)
+            ? {}
+            : {
+                Marker(
+                  markerId: const MarkerId('m1'),
+                  position: pickedLocation ??
+                      LatLng(
+                          widget.location.lattitude, widget.location.longitide),
+                ),
+              },
+      ),
     );
   }
 }
