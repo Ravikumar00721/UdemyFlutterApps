@@ -56,7 +56,7 @@ class UserPlacesNotifier extends StateNotifier<List<Place>> {
     final newPlace = Place(
       title: title,
       image: copiedimage,
-      loacation: location, // Make sure this matches Place's property
+      loacation: location, // Make sujre this matches Place's property
     );
     final db = await _getDatabase();
     await db.insert('user_places', {
