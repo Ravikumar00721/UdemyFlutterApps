@@ -24,6 +24,7 @@ class _AuthScreenState extends State<AuthScreen> {
   File? _selectedImage;
   var _isAuthenticating = false;
   var _imageurl;
+  var _username = "";
 
   final _form = GlobalKey<FormState>();
 
@@ -74,7 +75,7 @@ class _AuthScreenState extends State<AuthScreen> {
               .collection('users')
               .doc(userCredential.user!.uid) // Store using UID
               .set({
-            'username': 'to be done...',
+            'username': _username,
             'email': _enteredEmail,
             'imageurl': _imageurl ?? '', // Ensure it stores a string (not null)
           });
@@ -153,6 +154,23 @@ class _AuthScreenState extends State<AuthScreen> {
                               _enteredEmail = value!;
                             },
                           ),
+                          if (!_isLogin)
+                            TextFormField(
+                              decoration:
+                                  const InputDecoration(labelText: "Username"),
+                              validator: (value) {
+                                if (value == null ||
+                                    value.isEmpty ||
+                                    value.trim().length < 4) {
+                                  return "Password should not be less than 6";
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                _username = value.toString();
+                              },
+                              enableSuggestions: false,
+                            ),
                           TextFormField(
                             decoration: const InputDecoration(
                               labelText: "Password",
