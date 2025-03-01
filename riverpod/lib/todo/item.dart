@@ -1,6 +1,6 @@
 class Item {
-  final id;
-  final name;
+  final String id;
+  late final String name;
 
   Item({required this.id, required this.name});
 }

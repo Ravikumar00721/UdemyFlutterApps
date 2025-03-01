@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'hs3.dart';
+import 'package:riverpo/future/futurescreen.dart';
 
 void main() {
   runApp(const ProviderScope(
@@ -17,6 +16,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CenteredTextField();
+    return FutureScreen();
   }
 }
