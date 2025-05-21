@@ -20,7 +20,7 @@ class PlacesDetailScreen extends StatelessWidget {
       print("Location Address : $l");
     }
 
-    return 'https://maps.googleapis.com/maps/api/staticmap?center$lat,$long=&zoom=16&size=600x300&maptype=roadmap&markers=color:red%7Clabel:A%7C$lat,$long&key=AIzaSyCwdeYzq24mb3UIg85UQDZaivSbFZMla2M';
+    return 'https://maps.googleapis.com/maps/api/staticmap?center$lat,$long=&zoom=16&size=600x300&maptype=roadmap&markers=color:red%7Clabel:A%7C$lat,$long&key=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
   }
 
   @override
