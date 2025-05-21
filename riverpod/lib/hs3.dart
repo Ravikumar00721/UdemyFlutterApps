@@ -25,6 +25,16 @@ class CenteredTextField extends ConsumerWidget {
             Consumer(builder: (context, ref, child) {
               final search = ref.watch(searchProvider);
               return Text(search.search);
+            }),
+            SizedBox(height: 10),
+            Consumer(builder: (context, ref, child) {
+              final isChange =
+                  ref.watch(searchProvider.select((state) => state.isChange));
+              return Switch(
+                  value: isChange,
+                  onChanged: (value) {
+                    ref.read(searchProvider.notifier).onChange(value);
+                  });
             })
           ],
         ),
