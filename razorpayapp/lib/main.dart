@@ -56,7 +56,7 @@ class _PaymentPageState extends State<PaymentPage> {
         child: OutlinedButton(
           onPressed: () {
             var options = {
-              'key': 'rzp_test_QEwgoqd4Ud9o4A',
+              'key': '',
               'amount': 100, // in paise = ₹1
               'name': 'SEMO GAMING PVT LTD',
               'description': 'Subscription',
